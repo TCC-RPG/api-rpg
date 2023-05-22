@@ -33,5 +33,42 @@ module.exports = () => {
     }
   };
 
+  controller.buscar = async (req, res) => {
+    let ficha = {};
+
+    try {
+      const sistemasRef = db.collection("sistemas").doc(req.params.sistema);
+      const fichasRef = sistemasRef.collection("fichas").doc(req.params.ficha);
+
+      const fichaDoc = await fichasRef.get();
+
+      ficha.id = fichaDoc.id;
+      ficha.nome = fichaDoc.data().nome;
+
+      const camposRef = fichasRef.collection("campos");
+      const campos = [];
+
+      await camposRef.get().then((querySnapshot) => {
+        const docs = querySnapshot.docs;
+        for (const doc of docs) {
+          const campo = {
+            id: doc.id,
+            nome: doc.data().descricao,
+            tipo: doc.data().tipo,
+            grupo: doc.data().grupo,
+          };
+          campos.push(campo);
+        }
+      });
+
+      ficha.campos = campos;
+
+      return res.status(200).send(ficha);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  };
+
   return controller;
 };

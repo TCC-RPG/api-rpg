@@ -2,8 +2,11 @@
 module.exports = (app) => {
   const controller = app.controllers.fichas;
 
-  app.route("/api/v1/listar-fichas/:id")
+  app.route("/api/v1/sistema/:id/fichas")
       .get(controller.listar);
+
+  app.route("/api/v1/sistema/:sistema/fichas/:ficha")
+      .get(controller.buscar);
 
   return app;
 };
