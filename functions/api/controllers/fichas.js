@@ -34,7 +34,7 @@ module.exports = () => {
   };
 
   controller.buscar = async (req, res) => {
-    let ficha = {};
+    const ficha = {};
 
     try {
       const sistemasRef = db.collection("sistemas").doc(req.params.sistema);
@@ -46,22 +46,39 @@ module.exports = () => {
       ficha.nome = fichaDoc.data().nome;
 
       const camposRef = fichasRef.collection("campos");
-      const campos = [];
 
-      await camposRef.get().then((querySnapshot) => {
+      await camposRef.get().then(async (querySnapshot) => {
         const docs = querySnapshot.docs;
         for (const doc of docs) {
+          if (ficha[doc.data().grupo] === undefined) {
+            ficha[doc.data().grupo] = [];
+          }
+
           const campo = {
-            id: doc.id,
-            nome: doc.data().descricao,
-            tipo: doc.data().tipo,
-            grupo: doc.data().grupo,
+            "id": doc.id,
+            "nome": doc.data().descricao,
+            "tipo": doc.data().tipo,
+            "isFormula": doc.data().formula !== "",
+            "isSelect": doc.data().tipo === "select",
           };
-          campos.push(campo);
+
+          if (campo.isSelect) {
+            const opcoesRef = fichasRef.collection(campo.id);
+            const opcoesResponse = [];
+
+            await opcoesRef.get().then((opQuerySnapshot) => {
+              const opcoes = opQuerySnapshot.docs;
+              for (const opc of opcoes) {
+                opcoesResponse.push(opc.data().descricao);
+              }
+            });
+
+            campo.opcoes = opcoesResponse;
+          }
+
+          ficha[doc.data().grupo].push(campo);
         }
       });
-
-      ficha.campos = campos;
 
       return res.status(200).send(ficha);
     } catch (error) {
