@@ -2,8 +2,11 @@
 module.exports = (app) => {
   const controller = app.controllers.sistemas;
 
-  app.route("/api/v1/listar-sistemas")
+  app.route("/api/v1/sistemas")
       .get(controller.listar);
+
+  app.route("/api/v1/sistemas")
+      .post(controller.cadastrar);
 
   return app;
 };
