@@ -8,6 +8,24 @@ const db = admin.firestore();
 module.exports = () => {
   const controller = {};
 
+  controller.cadastrar = async (req, res) => {
+    try {
+      const data = {
+        nome: req.body.name,
+      };
+
+      const response = [];
+
+      const sistemasRef = await db.collection("sistemas").doc(req.params.id);
+      const novaFichaRef = sistemasRef.collection("fichas");
+      novaFichaRef.add(data);
+      return res.status(200).send(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  };
+
   controller.listar = async (req, res) => {
     const response = [];
 

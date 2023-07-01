@@ -12,7 +12,7 @@ module.exports = () => {
   controller.cadastrar = async (req, res) => {
     try {
       const data = {
-        nome: req.body.nome,
+        name: req.body.name,
       };
 
       const response = await db.collection("sistemas").add(data);

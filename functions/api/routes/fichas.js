@@ -5,6 +5,9 @@ module.exports = (app) => {
   app.route("/api/v1/sistema/:id/fichas")
       .get(controller.listar);
 
+  app.route("/api/v1/sistema/:id/fichas")
+      .post(controller.cadastrar);
+
   app.route("/api/v1/sistema/:sistema/fichas/:ficha")
       .get(controller.buscar);
 
