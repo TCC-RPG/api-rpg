@@ -9,9 +9,13 @@ module.exports = () => {
   const controller = {};
 
   controller.cadastrar = async (req, res) => {
+    if (req.body.nome == undefined || req.body.nome == "") {
+      throw new Error("Erro ao salvar ficha, necessário informar nome do Sistema");
+    }
+
     try {
       const data = {
-        nome: req.body.name,
+        nome: req.body.nome,
       };
 
       const response = [];
@@ -38,7 +42,7 @@ module.exports = () => {
         for (const doc of docs) {
           const selectedItem = {
             id: doc.id,
-            name: doc.data().nome,
+            nome: doc.data().nome,
           };
           response.push(selectedItem);
         }

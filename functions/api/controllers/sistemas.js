@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint linebreak-style: ["error", "windows"]*/
@@ -10,9 +11,13 @@ module.exports = () => {
   const controller = {};
 
   controller.cadastrar = async (req, res) => {
+    if (req.body.nome == undefined || req.body.nome == "") {
+      throw new Error("Erro ao salvar sistema, necessário informar nome do Sistema");
+    }
+
     try {
       const data = {
-        name: req.body.name,
+        nome: req.body.nome,
       };
 
       const response = await db.collection("sistemas").add(data);
@@ -32,7 +37,7 @@ module.exports = () => {
         for (const doc of docs) {
           const selectedItem = {
             id: doc.id,
-            name: doc.data().name,
+            nome: doc.data().nome,
           };
           response.push(selectedItem);
         }
