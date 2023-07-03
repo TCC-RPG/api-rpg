@@ -8,9 +8,6 @@ const db = admin.firestore();
 
 module.exports = () => {
   const controller = {};
-
-  const stringUtil = app.utils.stringUtil;
-
   controller.cadastrar = async (req, res) => {
     await validarCadastro(req.body);
 
@@ -67,19 +64,19 @@ module.exports = () => {
   };
 
   validarCadastro = async (body) => {
-    if (stringUtil.isNullSafety(body.id)) {
+    if (body.id != null || body.id === "") {
       throw new Error("Erro ao salvar campo, necessário informar id");
     }
 
-    if (stringUtil.isNullSafety(body.descricao)) {
+    if (body.descricao != null || body.descricao === "") {
       throw new Error("Erro ao salvar campo, necessário informar descrição");
     }
 
-    if (stringUtil.isNullSafety(body.grupo)) {
+    if (body.grupo != null || body.grupo === "") {
       throw new Error("Erro ao salvar campo, necessário informar grupo");
     }
 
-    if (stringUtil.isNullSafety(body.tipo)) {
+    if (body.tipo != null || body.tipo === "") {
       throw new Error("Erro ao salvar campo, necessário informar tipo");
     }
 
