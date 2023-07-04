@@ -13,6 +13,8 @@ module.exports = () => {
   app.use(bodyParser.json());
 
   consign({cwd: "api"})
+      .then("utils")
+      .then("services")
       .then("controllers")
       .then("routes")
       .into(app);
