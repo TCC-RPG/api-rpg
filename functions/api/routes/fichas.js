@@ -11,5 +11,8 @@ module.exports = (app) => {
   app.route("/api/v1/sistema/:sistema/fichas/:ficha")
       .get(controller.buscar);
 
+  app.route("/api/v1/sistema/:sistema/fichas/:ficha")
+      .post(controller.calcular);
+
   return app;
 };
